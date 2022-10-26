@@ -2,10 +2,14 @@ version: '3.2'
 services:
     las:
       image: registry.scontain.com:5050/sconecuratedimages/services:las
+      devices:
+         - "$DEVICE"
       privileged: true
     redis:
         image: registry.scontain.com:5050/sconecuratedimages/apps:redis-6-alpine-scone4
         command: sh -c "sleep 5; SCONE_LOG=TRACE SCONE_LAS_ADDR=las SCONE_CAS_ADDR=$SCONE_CAS_ADDR SCONE_CONFIG_ID=$REDIS_SESSION/redis redis-server"
+        devices:
+         - "$DEVICE"
         depends_on:
          - las
         ports:
@@ -14,6 +18,8 @@ services:
          - SCONE_VERSION=1
     python:
         image: "$IMAGE"
+        devices:
+         - "$DEVICE"
         command: sh -c "sleep 5; SCONE_LOG=TRACE SCONE_LAS_ADDR=las SCONE_CAS_ADDR=$SCONE_CAS_ADDR SCONE_CONFIG_ID=$FLASK_SESSION/flask_restapi python3"
         depends_on:
          - las

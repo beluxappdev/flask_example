@@ -15,7 +15,7 @@ trap "echo Unexpected error! See log above; exit 1" ERR
 
 export IMAGE=${IMAGE:-flask_restapi_image}
 export SCONE_CAS_ADDR="scone-cas.cf"
-export DEVICE="/dev/sgx"
+export DEVICE="/dev/sgx_enclave"
 
 export CAS_MRENCLAVE="3061b9feb7fa67f3815336a085f629a13f04b0a1667c93b14ff35581dc8271e4"
 
@@ -48,12 +48,12 @@ docker pull $CLI_IMAGE
 
 # attest cas before uploading the session file, accept CAS running in debug
 # mode (-d) and outdated TCB (-G)
-docker run -i $CLI_IMAGE sh -c "
+docker run --device=$DEVICE -i $CLI_IMAGE sh -c "
 scone cas attest -G --only_for_testing-debug --only_for_testing-ignore-signer  $SCONE_CAS_ADDR $CAS_MRENCLAVE >/dev/null \
 &&  scone cas show-certificate" > cas-ca.pem
 
 # create encrypte filesystem and fspf (file system protection file)
-docker run -i -v $(pwd)/fspf-file:/fspf/fspf-file -v $(pwd)/native-files:/fspf/native-files/ -v $(pwd)/encrypted-files:/fspf/encrypted-files $CLI_IMAGE /fspf/fspf-file/fspf.sh
+docker run --device=$DEVICE -i -v $(pwd)/fspf-file:/fspf/fspf-file -v $(pwd)/native-files:/fspf/native-files/ -v $(pwd)/encrypted-files:/fspf/encrypted-files $CLI_IMAGE /fspf/fspf-file/fspf.sh
 
 cat >Dockerfile <<EOF
 FROM $PYTHON_IMAGE

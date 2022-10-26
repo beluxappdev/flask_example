@@ -43,26 +43,17 @@ cp rest_api.py native-files/
 # ensure that we have an up-to-date image
 docker pull $CLI_IMAGE
 
-# check if SGX device exists
-
-if [[ ! -c "$DEVICE" ]] ; then
-    export DEVICE_O="DEVICE"
-    export DEVICE="/dev/isgx"
-    if [[ ! -c "$DEVICE" ]] ; then
-        echo "Neither $DEVICE_O nor $DEVICE exist"
-        exit 1
-    fi
-fi
+# assume we run an SGX enabled VM
 
 
 # attest cas before uploading the session file, accept CAS running in debug
 # mode (-d) and outdated TCB (-G)
-docker run --device=$DEVICE -it $CLI_IMAGE sh -c "
+docker run -i $CLI_IMAGE sh -c "
 scone cas attest -G --only_for_testing-debug --only_for_testing-ignore-signer  $SCONE_CAS_ADDR $CAS_MRENCLAVE >/dev/null \
 &&  scone cas show-certificate" > cas-ca.pem
 
 # create encrypte filesystem and fspf (file system protection file)
-docker run --device=$DEVICE  -it -v $(pwd)/fspf-file:/fspf/fspf-file -v $(pwd)/native-files:/fspf/native-files/ -v $(pwd)/encrypted-files:/fspf/encrypted-files $CLI_IMAGE /fspf/fspf-file/fspf.sh
+docker run -i -v $(pwd)/fspf-file:/fspf/fspf-file -v $(pwd)/native-files:/fspf/native-files/ -v $(pwd)/encrypted-files:/fspf/encrypted-files $CLI_IMAGE /fspf/fspf-file/fspf.sh
 
 cat >Dockerfile <<EOF
 FROM $PYTHON_IMAGE

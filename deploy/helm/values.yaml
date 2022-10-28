@@ -17,6 +17,7 @@ port: 4996
 
 imagePullSecrets:
   - name: sconeapps
+  - name: acrsecret
 
 scone:
   api_session: "FlaskSession-23133-13488-7144/flask_restapi"

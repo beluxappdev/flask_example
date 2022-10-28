@@ -4,7 +4,7 @@
 
 # configure redis
 redis:
-  image: sconecuratedimages/experimental:redis-6-ubuntu
+  image: registry.scontain.com:5050/sconecuratedimages/experimental:redis-6-ubuntu
   service:
     port: 6379
 

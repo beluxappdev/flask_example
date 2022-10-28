@@ -20,9 +20,9 @@ export DEVICE="/dev/sgx_enclave"
 export CAS_MRENCLAVE="3061b9feb7fa67f3815336a085f629a13f04b0a1667c93b14ff35581dc8271e4"
 
 export CLI_IMAGE="registry.scontain.com:5050/sconecuratedimages/kubernetes:hello-k8s-scone0.3"
-export PYTHON_IMAGE="registry.scontain.com:5050/sconecuratedimages/apps:python-3.7.3-alpine3.10"
+export PYTHON_IMAGE="registry.scontain.com:5050/sconecuratedimages/public-apps:python-3.7.3-alpine3.10"
 export PYTHON_MRENCLAVE="2f7f82345b032157698fb78f9abae2d3c9aab2023f5e2255d2d54f23a50eb457"
-export REDIS_IMAGE="registry.scontain.com:5050/sconecuratedimages/apps:redis-6-alpine-scone4.2.1"
+export REDIS_IMAGE="registry.scontain.com:5050/clenimar/azure-integration-demo:redis6-scone5.2.1"
 export REDIS_MRENCLAVE="32c0dcbbfcfc951fc21c8f611227e50593e5e759c1d659c63575078c35fadb9b"
 
 # create random and hence, uniquee session number
